@@ -4,7 +4,7 @@
     --board-color: #264b39;
     --player-turn-background: #B6EADA;
     --text-color: black;
-
+    --board-border-radius: 30px
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,7 +13,7 @@
         --board-outline-color: #5B8FB9;
         --board-color: #301E67;
         --player-turn-background: #B6EADA;
-        --text-color: black;
+        --text-color: white;
     }
 }
 
@@ -33,10 +33,9 @@ body {
     overflow: hidden;
     color: var(--text-color);
     height: 100vh;
-}
-
-body {
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--background);
 }
 

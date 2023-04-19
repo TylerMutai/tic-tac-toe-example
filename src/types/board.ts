@@ -1,4 +1,4 @@
-import playerTypes from "@/types/players";
+import playerTypes from "@/types/playerTypes";
 
 export interface Board {
   /**

@@ -1,9 +1,11 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useRef} from 'react';
 import BoardContext from "@/context/boardContext";
 import currentPlayerReducer, {currentPlayerInitialState} from "@/reducers/currentPlayer/reducers";
-import playerTypes from "@/types/players";
+import playerTypes from "@/types/playerTypes";
 import {setCurrentPlayer} from "@/reducers/currentPlayer/actions";
 import PlayerTurn from "@/components/turns/PlayerTurn";
+import styles from "./css/board.module.scss";
+import BoardText from "@/components/board/text/BoardText";
 
 function Board() {
   const [state, dispatch] = useReducer(currentPlayerReducer, currentPlayerInitialState)
@@ -12,16 +14,26 @@ function Board() {
     dispatch(setCurrentPlayer(player))
   }
 
+  const players = useRef<playerTypes[]>([
+    "player-1",
+    "player-2"
+  ]);
+
   return (
     <BoardContext.Provider value={{
       currentPlayer: state.currentPlayer,
       setCurrentPlayer: handleSetCurrentPlayer
     }}>
-      <PlayerTurn/>
-      <button onClick={() => handleSetCurrentPlayer(state.currentPlayer === "player-1" ?
-        "player-2" : "player-1")}>
-        This be a button
-      </button>
+      <div className={styles.main_container}>
+        <div className={styles.player_turn_container}>
+          {players.current.map(p => <PlayerTurn key={p} player={p}/>)}
+        </div>
+        <div className={styles.container}>
+          <div className={styles.inner}>
+            <BoardText/>
+          </div>
+        </div>
+      </div>
     </BoardContext.Provider>
   );
 }
