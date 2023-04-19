@@ -16,7 +16,7 @@ function Board() {
 
   const players = useRef<playerTypes[]>([
     "player-1",
-    "player-2"
+    "computer"
   ]);
 
   return (
