@@ -9,7 +9,8 @@ interface Props {
 }
 
 function PlayerTurn({player}: Props) {
-  const {currentPlayer} = useContext(boardContext)
+  const {interactionAreaState} = useContext(boardContext);
+  const currentPlayer = interactionAreaState.currentPlayer;
   const isCurrentPlayer = currentPlayer === player;
   return (
     <div className={`${styles.container} ${isCurrentPlayer ? styles.show : ""}`}>

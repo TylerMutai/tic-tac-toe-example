@@ -8,9 +8,12 @@ export const interactionAreaInitialState: InteractionAreaState = {
   cellsPlayed: new Map<string, playerTypes>(),
   // TODO: @param boardSize Enable this to change to increase the board size.
   boardSize: 3
+  // TODO: Randomize starting player (i.e. either computer or player 1)
+
+  // TODO: Allow automated mode: where computer plays automatically.
 }
 
-const interactionAreaReducer = (state: InteractionAreaState, action: InteractionAreaAction) => {
+const interactionAreaReducer = (state: InteractionAreaState, action: InteractionAreaAction): InteractionAreaState => {
   switch (action.type) {
     case "show_reset_button":
       return {...state, shouldShowResetButton: true}
@@ -20,8 +23,8 @@ const interactionAreaReducer = (state: InteractionAreaState, action: Interaction
       return interactionAreaInitialState;
     case "play_move":
       // check if the move being played is possible
-      const player = action.payload.player;
-      const move = action.payload.move;
+      const player = action.payload?.player || "player-1"; // Can never be undefined
+      const move = action.payload?.move || ""; // Can never be undefined
       const playedMoves = new Set(state.playedMoves);
       const cellsPlayed = new Map(state.cellsPlayed);
       const boardSize = state.boardSize;
@@ -84,10 +87,10 @@ const interactionAreaReducer = (state: InteractionAreaState, action: Interaction
       // 3. Play the move since it's available and game is not over.
       playedMoves.add(move);
       cellsPlayed.set(move, player);
-      return {...state, playedMoves, cellsPlayed}
+      const newCurrentPlayer = player === "player-1" ? "computer" : "player-1";
+      return {...state, playedMoves, cellsPlayed, currentPlayer: newCurrentPlayer}
     default:
       return state;
-
   }
 }
 

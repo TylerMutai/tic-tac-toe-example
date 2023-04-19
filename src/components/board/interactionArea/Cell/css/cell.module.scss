@@ -1,0 +1,16 @@
+.container {
+  transition: .5s ease-in-out;
+  transform: scale(1);
+  border: 1px solid var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  border-color: inherit;
+  font-size: 56px;
+}
+
+.container:hover {
+  transform: scale(1.3);
+}

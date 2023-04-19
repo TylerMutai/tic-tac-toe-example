@@ -23,6 +23,8 @@ interface InteractionAreaState {
    */
   shouldShowResetButton?: boolean;
 
+  currentPlayer?: playerTypes
+
 
 }
 

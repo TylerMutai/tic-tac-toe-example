@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from "./css/text.module.scss";
 
-function BoardText() {
+function StartGameText() {
   return (
     <div className={styles.container}>
       <h2>Tic Tac Toe Game</h2>
@@ -15,4 +15,4 @@ function BoardText() {
   );
 }
 
-export default BoardText;
+export default StartGameText;

@@ -1,36 +1,49 @@
-import React, {useReducer, useRef} from 'react';
+import React, {useEffect, useLayoutEffect, useReducer, useRef, useState} from 'react';
 import BoardContext from "@/context/boardContext";
-import currentPlayerReducer, {currentPlayerInitialState} from "@/reducers/currentPlayer/reducers";
 import playerTypes from "@/types/playerTypes";
-import {setCurrentPlayer} from "@/reducers/currentPlayer/actions";
 import PlayerTurn from "@/components/turns/PlayerTurn";
 import styles from "./css/board.module.scss";
-import BoardText from "@/components/board/text/BoardText";
+import StartGameText from "@/components/board/text/StartGameText";
+import interactionAreaReducer, {interactionAreaInitialState} from "@/reducers/interactionArea/reducer";
+import ResetGameButton from "@/components/board/text/ResetGameButton";
+import InteractionArea from "@/components/board/interactionArea/InteractionArea";
 
 function Board() {
-  const [state, dispatch] = useReducer(currentPlayerReducer, currentPlayerInitialState)
-
-  const handleSetCurrentPlayer = (player: playerTypes) => {
-    dispatch(setCurrentPlayer(player))
-  }
+  const [state, dispatch] = useReducer(interactionAreaReducer, interactionAreaInitialState)
+  const [width, setWidth] = useState(500);
+  const [height, setHeight] = useState(500);
+  const ref = useRef<HTMLDivElement>(null);
 
   const players = useRef<playerTypes[]>([
     "player-1",
     "computer"
   ]);
 
+  useEffect(() => {
+    if (ref.current?.offsetHeight && ref.current?.offsetHeight) {
+      setWidth(ref.current?.offsetWidth);
+      setHeight(ref.current?.offsetHeight);
+    }
+  }, []);
+
   return (
     <BoardContext.Provider value={{
-      currentPlayer: state.currentPlayer,
-      setCurrentPlayer: handleSetCurrentPlayer
+      interactionAreaState: state,
+      interactionAreaDispatch: dispatch,
+      currentWidth: width,
+      currentHeight: height,
     }}>
       <div className={styles.main_container}>
         <div className={styles.player_turn_container}>
           {players.current.map(p => <PlayerTurn key={p} player={p}/>)}
         </div>
-        <div className={styles.container}>
+        <div
+          ref={ref}
+          className={styles.container}>
           <div className={styles.inner}>
-            <BoardText/>
+            <InteractionArea/>
+            <StartGameText/>
+            {state.shouldShowResetButton ? <ResetGameButton/> : null}
           </div>
         </div>
       </div>
