@@ -28,7 +28,8 @@ interface Props {
 function Cell({size, moveToPlay, right, bottom}: Props) {
   const {interactionAreaState, interactionAreaDispatch} = useContext(boardContext);
   const currentPlayer = interactionAreaState.currentPlayer ?? "player-1"
-  const player = interactionAreaState.cellsPlayed.get(moveToPlay) === "computer" ? "X" : "O";
+  const savedPlayer = interactionAreaState.cellsPlayed.get(moveToPlay)
+  const player = savedPlayer ? savedPlayer === "computer" ? "X" : "O" : "";
   return (
     <div
       style={{

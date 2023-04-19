@@ -12,6 +12,7 @@ function Board() {
   const [state, dispatch] = useReducer(interactionAreaReducer, interactionAreaInitialState)
   const [width, setWidth] = useState(500);
   const [height, setHeight] = useState(500);
+  const [padding, setPadding] = useState(500);
   const ref = useRef<HTMLDivElement>(null);
 
   const players = useRef<playerTypes[]>([
@@ -20,9 +21,10 @@ function Board() {
   ]);
 
   useEffect(() => {
-    if (ref.current?.offsetHeight && ref.current?.offsetHeight) {
-      setWidth(ref.current?.offsetWidth);
-      setHeight(ref.current?.offsetHeight);
+    if (ref.current) {
+      const element = ref.current;
+      setWidth(element.clientWidth);
+      setHeight(element.clientHeight);
     }
   }, []);
 

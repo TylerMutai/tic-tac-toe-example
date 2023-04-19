@@ -11,9 +11,12 @@ function InteractionArea() {
   for (let i = 0; i < boardSize; i++) {
     for (let j = 0; j < boardSize; j++) {
       const key = `${i}${j}`;
+      const cellWidth = currentWidth / boardSize;
+      const right = Math.floor(j * cellWidth);
+      const bottom =  Math.floor(i * cellWidth);
       cells.push(
-        <Cell key={key} right={j * currentWidth}
-              bottom={i * currentWidth} moveToPlay={key} size={currentWidth / boardSize}/>
+        <Cell key={key} right={right}
+              bottom={bottom} moveToPlay={key} size={cellWidth}/>
       )
     }
   }
