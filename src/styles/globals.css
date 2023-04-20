@@ -4,7 +4,9 @@
     --board-color: #264b39;
     --player-turn-background: #B6EADA;
     --text-color: black;
-    --board-border-radius: 30px
+    --board-border-radius: 30px;
+    --board-border-width: 30px;
+    --board-shadow:  10px 20px black;
 }
 
 @media (prefers-color-scheme: dark) {

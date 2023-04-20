@@ -6,7 +6,7 @@ $containerHeight: 100px;
   background: var(--player-turn-background);
   padding: 10px 20px;
   height: $containerHeight;
-  transition: .5s ease-in-out bottom;
+  transition: .5s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,11 +16,12 @@ $containerHeight: 100px;
   position: absolute;
   bottom: -$containerHeight;
   border: none;
-  box-shadow: 5px 10px black;
+  box-shadow: var(--board-shadow);
   border-radius: var(--board-border-radius) var(--board-border-radius) 0 0;
 }
 
 .show {
   bottom: 0;
+  z-index: 0;
 }
 
