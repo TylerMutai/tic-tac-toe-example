@@ -93,41 +93,47 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
   // 2. Check columns
   let doesColumnMatch = true;
   let columnCheck: playerTypes | undefined;
-  for (let i = 0; i < boardSize; i++) {
-    columnCheck = cellsPlayed.get(`${0}${i}`) || "-";
-    for (let j = 1; j < boardSize; j++) {
-      if (columnCheck !== cellsPlayed.get(`${j}${i}`)) {
-        doesColumnMatch = false;
+  if (!doesRowMatch) {
+    for (let i = 0; i < boardSize; i++) {
+      columnCheck = cellsPlayed.get(`${0}${i}`) || "-";
+      for (let j = 1; j < boardSize; j++) {
+        if (columnCheck !== cellsPlayed.get(`${j}${i}`)) {
+          doesColumnMatch = false;
+          break;
+        }
+      }
+      if (doesColumnMatch) {
+        // exit, since we already found a winner.
         break;
       }
-    }
-    if (doesColumnMatch) {
-      // exit, since we already found a winner.
-      break;
     }
   }
 
 
   // 3. Check left diagonal
-  // Duplicate indices (i.e. 00, 11,22 ...) and you'll get your left diagonal.
   let doesLeftDiagonalMatch = true;
+  // Duplicate indices (i.e. 00, 11,22 ...) and you'll get your left diagonal.
   const leftDiagonalCheck = cellsPlayed.get(`${0}${0}`) || "-";
-  for (let i = 1; i < boardSize; i++) {
-    let nextLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
-    if (leftDiagonalCheck !== nextLeftDiagonalCheck) {
-      doesLeftDiagonalMatch = false;
-      break;
+  if (!doesColumnMatch) {
+    for (let i = 1; i < boardSize; i++) {
+      let nextLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
+      if (leftDiagonalCheck !== nextLeftDiagonalCheck) {
+        doesLeftDiagonalMatch = false;
+        break;
+      }
     }
   }
 
-  // 3. Check right diagonal.
+  // 4. Check right diagonal.
   let doesRightDiagonalMatch = true;
   const rightDiagonalCheck = cellsPlayed.get(`${0}${boardSize - 1}`) || "-";
-  for (let i = 1; i < boardSize; i++) {
-    let nextRightDiagonalCheck = cellsPlayed.get(`${i}${boardSize - 1 - i}`);
-    if (rightDiagonalCheck !== nextRightDiagonalCheck) {
-      doesRightDiagonalMatch = false;
-      break;
+  if (!doesLeftDiagonalMatch) {
+    for (let i = 1; i < boardSize; i++) {
+      let nextRightDiagonalCheck = cellsPlayed.get(`${i}${boardSize - 1 - i}`);
+      if (rightDiagonalCheck !== nextRightDiagonalCheck) {
+        doesRightDiagonalMatch = false;
+        break;
+      }
     }
   }
 
