@@ -29,7 +29,7 @@ function Cell({size, moveToPlay, left, top}: Props) {
   const {interactionAreaState, interactionAreaDispatch} = useContext(boardContext);
   const currentPlayer = interactionAreaState.currentPlayer ?? "player-1"
   const savedPlayer = interactionAreaState.cellsPlayed.get(moveToPlay)
-  const player = savedPlayer ? savedPlayer === "computer" ? "X" : "O" : "";
+  const player = savedPlayer ? savedPlayer === "player-1" ? "X" : "O" : "";
   return (
     <div
       style={{
