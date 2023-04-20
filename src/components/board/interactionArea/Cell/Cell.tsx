@@ -7,12 +7,12 @@ interface Props {
   /**
    * Where to position the cell along the x-axis on the board
    */
-  right: number,
+  left: number,
 
   /**
    * Where to position the cell along the y-axis on the board
    */
-  bottom: number,
+  top: number,
 
   /**
    * The width and height of this cell on the board
@@ -25,7 +25,7 @@ interface Props {
   moveToPlay: string;
 }
 
-function Cell({size, moveToPlay, right, bottom}: Props) {
+function Cell({size, moveToPlay, left, top}: Props) {
   const {interactionAreaState, interactionAreaDispatch} = useContext(boardContext);
   const currentPlayer = interactionAreaState.currentPlayer ?? "player-1"
   const savedPlayer = interactionAreaState.cellsPlayed.get(moveToPlay)
@@ -35,8 +35,8 @@ function Cell({size, moveToPlay, right, bottom}: Props) {
       style={{
         width: size,
         height: size,
-        right,
-        bottom,
+        left: left,
+        top: top,
       }}
       onClick={e => {
         e.stopPropagation();

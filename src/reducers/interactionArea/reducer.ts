@@ -89,12 +89,12 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
       const rowCheck = cellsPlayed.get(rowKey)
       const columnCheck = cellsPlayed.get(columnKey)
 
-      // If either one of the cells have not been played, exit loop.
       // This is to prevent 'undefined' === 'undefined' check, which would return true;
-      if (!currentRowCheck && !currentColumnCheck) {
+      if (!currentRowCheck) {
         doesRowMatch = false;
+      }
+      if (!currentColumnCheck) {
         doesColumnMatch = false;
-        break;
       }
 
       if (rowCheck !== currentRowCheck) {
@@ -112,10 +112,19 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
     }
 
     // check diagonals.
+    let currentLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
+    let currentRightDiagonalCheck = cellsPlayed.get(`${i}${rightDiagonalIndex}`);
+
+    // If no move has been made in cells that are part of the diagonals, quit.
+    if (!currentLeftDiagonalCheck && !currentRightDiagonalCheck) {
+      doesLeftDiagonalMatch = false;
+      doesRightDiagonalMatch = false;
+      break;
+    }
     // 2. Check left diagonal
     // Left diagonal is pretty straight forward. duplicate indices (i.e. 00, 11,22 ...) and you'll get your
     // left diagonal.
-    let currentLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
+
     if (i + 1 < boardSize) {
       let nextLeftDiagonalCheck = cellsPlayed.get(`${i + 1}${i + 1}`);
       if (currentLeftDiagonalCheck !== nextLeftDiagonalCheck) {
@@ -124,7 +133,6 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
     }
 
     // 3. Check right diagonal.
-    let currentRightDiagonalCheck = cellsPlayed.get(`${i}${rightDiagonalIndex}`);
     if (rightDiagonalIndex - 1 >= 0) {
       let nextRightDiagonalCheck = cellsPlayed.get(`${i + 1}${rightDiagonalIndex - 1}`);
       if (currentRightDiagonalCheck !== nextRightDiagonalCheck) {

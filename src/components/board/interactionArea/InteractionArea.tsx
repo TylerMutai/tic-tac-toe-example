@@ -15,8 +15,8 @@ function InteractionArea() {
       const right = Math.floor(j * cellWidth);
       const bottom =  Math.floor(i * cellWidth);
       cells.push(
-        <Cell key={key} right={right}
-              bottom={bottom} moveToPlay={key} size={cellWidth}/>
+        <Cell key={key} left={right}
+              top={bottom} moveToPlay={key} size={cellWidth}/>
       )
     }
   }
