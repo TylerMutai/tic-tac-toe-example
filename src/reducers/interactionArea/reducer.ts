@@ -7,14 +7,19 @@ export const interactionAreaInitialState: InteractionAreaState = {
   playedMoves: new Set<string>(),
   cellsPlayed: new Map<string, playerTypes>(),
   // TODO: @param boardSize Enable this to change to increase the board size.
-  boardSize: 3
-  // TODO: Randomize starting player (i.e. either computer or player 1)
+  boardSize: 3,
+  hasGameStarted: false,
 
+  // TODO: Randomize starting player (i.e. either computer or player 1)
   // TODO: Allow automated mode: where computer plays automatically.
 }
 
 const interactionAreaReducer = (state: InteractionAreaState, action: InteractionAreaAction): InteractionAreaState => {
   switch (action.type) {
+    case "start_game":
+      // randomize between 'computer' and 'player-1'. 'player-1' will be '1' and 'computer will be '2'
+      const start = (Math.random() * 2) + 1;
+      return {...state, hasGameStarted: true, currentPlayer: start === 1 ? "player-1" : "computer"}
     case "show_reset_button":
       return {...state, shouldShowResetButton: true}
     case "hide_reset_button":

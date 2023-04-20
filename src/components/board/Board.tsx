@@ -44,7 +44,7 @@ function Board() {
           className={styles.container}>
           <div className={styles.inner}>
             <InteractionArea/>
-            <StartGameText/>
+            {state.hasGameStarted ? null : <StartGameText/>}
             {state.shouldShowResetButton ? <ResetGameButton/> : null}
           </div>
         </div>

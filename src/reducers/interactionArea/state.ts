@@ -25,6 +25,11 @@ interface InteractionAreaState {
 
   currentPlayer?: playerTypes
 
+  /**
+   * Indicates whether the game has started. Used to hide the introductory text.
+   */
+  hasGameStarted: boolean
+
 
 }
 
