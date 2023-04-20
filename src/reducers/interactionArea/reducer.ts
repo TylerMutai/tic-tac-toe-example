@@ -41,62 +41,96 @@ const interactionAreaReducer = (state: InteractionAreaState, action: Interaction
         return {...state};
       }
 
-      // 2. Check if this move is the last move. If so, check to see who won.
-      if ((playedMoves.size + 1) === (state.boardSize * state.boardSize)) {
-        // set values accordingly for this last move.
-        playedMoves.add(move);
-        cellsPlayed.set(move, player)
-
-        // Game is over. Check if anyone won and reset state
-        // Loop through board and check for matches.
-
-        // 1. Check if any line of columns/rows match.
-        for (let i = 0; i < boardSize; i++) {
-          // check if row matches.
-          let rowMatches = true;
-          let columnMatches = true;
-          let currentRowCheck = `${i}${boardSize - 1}`;
-          let currentColumnCheck = `${boardSize - 1}${i}`;
-          let f = boardSize - 2;
-
-          // check rows.
-          while (f >= 0) {
-            const rowCheck = `${i}${f}`
-            const columnCheck = `${f}${i}`
-            if (rowCheck !== currentRowCheck) {
-              // The row does not match. Break out of loop.
-              rowMatches = false;
-            }
-            if (columnCheck !== currentColumnCheck) {
-              // The row does not match. Break out of loop.
-              columnMatches = false;
-            }
-            currentRowCheck = rowCheck;
-            currentColumnCheck = columnCheck;
-            f--;
-          }
-
-          let currentWinner: playerTypes | undefined;
-          if (rowMatches) {
-            currentWinner = cellsPlayed.get(currentRowCheck);
-          } else if (columnMatches) {
-            currentWinner = cellsPlayed.get(currentColumnCheck);
-          }
-          if (currentWinner) {
-            alert(`Game over. ${toTitleCase(currentWinner)} has won! Click on the reset button to start over.`);
-            return {...state, shouldShowResetButton: true, playedMoves, cellsPlayed}
-          }
-        }
-      }
-
-      // 3. Play the move since it's available and game is not over.
+      // 2. Inject the current move (Play the move)
       playedMoves.add(move);
       cellsPlayed.set(move, player);
+
+
+      // 3. Check for winner
+      if (checkWinner(boardSize, cellsPlayed)) {
+        return {...state, shouldShowResetButton: true, playedMoves, cellsPlayed}
+      }
+
+      // 4. If no winner was found, and there aren't any other moves, end game.
+      if (cellsPlayed.size === (boardSize * boardSize)) {
+        // No more moves to play
+        alert(`Game over. No player has won. Click on the reset button to start over.`);
+        return {...state, shouldShowResetButton: true, playedMoves, cellsPlayed}
+      }
+
+      // 3. Play the move.
       const newCurrentPlayer = player === "player-1" ? "computer" : "player-1";
       return {...state, playedMoves, cellsPlayed, currentPlayer: newCurrentPlayer}
     default:
       return state;
   }
+}
+
+/**
+ *
+ * @returns true if a winner was found, false otherwise.
+ */
+const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): boolean => {
+  for (let i = 0; i < boardSize; i++) {
+    // check if row matches.
+    let rowMatches = true;
+    let columnMatches = true;
+    let f = boardSize - 1;
+    let currentRowCheck = cellsPlayed.get(`${i}${f}`);
+    let currentColumnCheck = cellsPlayed.get(`${f}${i}`);
+    f--;
+    // check rows & columns.
+    while (f >= 0) {
+      const rowKey = `${i}${f}`;
+      const columnKey = `${f}${i}`;
+      const rowCheck = cellsPlayed.get(rowKey)
+      const columnCheck = cellsPlayed.get(columnKey)
+
+      // If either one of the cells have not been played, exit loop.
+      // This is so as to prevent 'undefined' === 'undefined' check, which would return true;
+      if (!currentRowCheck && !currentColumnCheck) {
+        rowMatches = false;
+        columnMatches = false;
+        break;
+      }
+
+      if (rowCheck !== currentRowCheck) {
+        // The row does not match. Break out of loop.
+        rowMatches = false;
+      }
+      if (columnCheck !== currentColumnCheck) {
+        // The row does not match. Break out of loop.
+        columnMatches = false;
+      }
+
+      console.log("currentRowCheck", currentRowCheck);
+      // console.log("currentColumnCheck", currentColumnCheck);
+      console.log("rowCheck", rowCheck);
+      console.log("rowCheckComparison", rowMatches);
+      console.log("columnCheckComparison", columnCheck);
+      // console.log("columnCheck", columnCheck);
+      currentRowCheck = rowCheck;
+      currentColumnCheck = columnCheck;
+      f--;
+    }
+    // console.log("---------------------");
+    // console.log("currentRowCheck", currentRowCheck);
+    // console.log("currentColumnCheck", currentColumnCheck);
+    console.log("rowMatches", rowMatches);
+    console.log("columnMatches", columnMatches);
+
+    let currentWinner: playerTypes | undefined;
+    if (rowMatches) {
+      currentWinner = currentRowCheck;
+    } else if (columnMatches) {
+      currentWinner = currentColumnCheck;
+    }
+    if (currentWinner) {
+      alert(`Game over. ${toTitleCase(currentWinner)} has won! Click on the reset button to start over.`);
+      return true;
+    }
+  }
+  return false;
 }
 
 export default interactionAreaReducer;

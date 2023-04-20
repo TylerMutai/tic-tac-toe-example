@@ -6,12 +6,12 @@ import {setResetGame} from "@/reducers/interactionArea/action";
 function StartGameText() {
   const {interactionAreaDispatch} = useContext(boardContext);
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.no_background}`}>
       <button
         onClick={() => {
           interactionAreaDispatch(setResetGame())
         }}
-        className={styles.button}>
+        className={`${styles.button} ${styles.outline}`}>
         Reset Game
       </button>
     </div>
