@@ -18,7 +18,7 @@ const interactionAreaReducer = (state: InteractionAreaState, action: Interaction
   switch (action.type) {
     case "start_game":
       // randomize between 'computer' and 'player-1'. 'player-1' will be '1' and 'computer will be '2'
-      const start = (Math.random() * 2) + 1;
+      const start = Math.round((Math.random() * 2));
       return {...state, hasGameStarted: true, currentPlayer: start === 1 ? "player-1" : "computer"}
     case "show_reset_button":
       return {...state, shouldShowResetButton: true}
