@@ -73,11 +73,14 @@ const interactionAreaReducer = (state: InteractionAreaState, action: Interaction
 const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): boolean => {
   for (let i = 0; i < boardSize; i++) {
     // check if row matches.
-    let rowMatches = true;
-    let columnMatches = true;
+    let doesRowMatch = true;
+    let doesColumnMatch = true;
+    let doesLeftDiagonalMatch = true;
+    let doesRightDiagonalMatch = true;
     let f = boardSize - 1;
     let currentRowCheck = cellsPlayed.get(`${i}${f}`);
     let currentColumnCheck = cellsPlayed.get(`${f}${i}`);
+    let rightDiagonalIndex = boardSize;
     f--;
     // check rows & columns.
     while (f >= 0) {
@@ -87,42 +90,53 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
       const columnCheck = cellsPlayed.get(columnKey)
 
       // If either one of the cells have not been played, exit loop.
-      // This is so as to prevent 'undefined' === 'undefined' check, which would return true;
+      // This is to prevent 'undefined' === 'undefined' check, which would return true;
       if (!currentRowCheck && !currentColumnCheck) {
-        rowMatches = false;
-        columnMatches = false;
+        doesRowMatch = false;
+        doesColumnMatch = false;
         break;
       }
 
       if (rowCheck !== currentRowCheck) {
-        // The row does not match. Break out of loop.
-        rowMatches = false;
+        // The row does not match.
+        doesRowMatch = false;
       }
       if (columnCheck !== currentColumnCheck) {
-        // The row does not match. Break out of loop.
-        columnMatches = false;
+        // The column does not match.
+        doesColumnMatch = false;
       }
 
-      console.log("currentRowCheck", currentRowCheck);
-      // console.log("currentColumnCheck", currentColumnCheck);
-      console.log("rowCheck", rowCheck);
-      console.log("rowCheckComparison", rowMatches);
-      console.log("columnCheckComparison", columnCheck);
-      // console.log("columnCheck", columnCheck);
       currentRowCheck = rowCheck;
       currentColumnCheck = columnCheck;
       f--;
     }
-    // console.log("---------------------");
-    // console.log("currentRowCheck", currentRowCheck);
-    // console.log("currentColumnCheck", currentColumnCheck);
-    console.log("rowMatches", rowMatches);
-    console.log("columnMatches", columnMatches);
+
+    // check diagonals.
+    // 2. Check left diagonal
+    // Left diagonal is pretty straight forward. duplicate indices (i.e. 00, 11,22 ...) and you'll get your
+    // left diagonal.
+    if (i + 1 < boardSize) {
+      let currentLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
+      let nextLeftDiagonalCheck = cellsPlayed.get(`${i + 1}${i + 1}`);
+      if (currentLeftDiagonalCheck !== nextLeftDiagonalCheck) {
+        doesLeftDiagonalMatch = false;
+      }
+    }
+
+    // 3. Check right diagonal.
+    if (rightDiagonalIndex - 1 >= 0) {
+      let currentRightDiagonalCheck = cellsPlayed.get(`${i}${rightDiagonalIndex}`);
+      let nextRightDiagonalCheck = cellsPlayed.get(`${i+1}${rightDiagonalIndex - 1}`);
+      if (currentRightDiagonalCheck !== nextRightDiagonalCheck) {
+        doesRightDiagonalMatch = false;
+      }
+    }
+    rightDiagonalIndex--;
 
     let currentWinner: playerTypes | undefined;
-    if (rowMatches) {
+    if (doesRowMatch) {
       currentWinner = currentRowCheck;
-    } else if (columnMatches) {
+    } else if (doesColumnMatch) {
       currentWinner = currentColumnCheck;
     }
     if (currentWinner) {
