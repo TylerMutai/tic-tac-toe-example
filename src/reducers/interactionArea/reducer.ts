@@ -115,8 +115,8 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
     // 2. Check left diagonal
     // Left diagonal is pretty straight forward. duplicate indices (i.e. 00, 11,22 ...) and you'll get your
     // left diagonal.
+    let currentLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
     if (i + 1 < boardSize) {
-      let currentLeftDiagonalCheck = cellsPlayed.get(`${i}${i}`);
       let nextLeftDiagonalCheck = cellsPlayed.get(`${i + 1}${i + 1}`);
       if (currentLeftDiagonalCheck !== nextLeftDiagonalCheck) {
         doesLeftDiagonalMatch = false;
@@ -124,9 +124,9 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
     }
 
     // 3. Check right diagonal.
+    let currentRightDiagonalCheck = cellsPlayed.get(`${i}${rightDiagonalIndex}`);
     if (rightDiagonalIndex - 1 >= 0) {
-      let currentRightDiagonalCheck = cellsPlayed.get(`${i}${rightDiagonalIndex}`);
-      let nextRightDiagonalCheck = cellsPlayed.get(`${i+1}${rightDiagonalIndex - 1}`);
+      let nextRightDiagonalCheck = cellsPlayed.get(`${i + 1}${rightDiagonalIndex - 1}`);
       if (currentRightDiagonalCheck !== nextRightDiagonalCheck) {
         doesRightDiagonalMatch = false;
       }
@@ -138,6 +138,10 @@ const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTypes>): 
       currentWinner = currentRowCheck;
     } else if (doesColumnMatch) {
       currentWinner = currentColumnCheck;
+    } else if (doesRightDiagonalMatch) {
+      currentWinner = currentRightDiagonalCheck;
+    } else if (doesLeftDiagonalMatch) {
+      currentWinner = currentLeftDiagonalCheck;
     }
     if (currentWinner) {
       alert(`Game over. ${toTitleCase(currentWinner)} has won! Click on the reset button to start over.`);
