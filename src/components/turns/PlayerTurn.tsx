@@ -12,20 +12,26 @@ function PlayerTurn({player}: Props) {
   const {interactionAreaState} = useContext(boardContext);
   const [showStyles, setShowStyles] = useState(styles.show);
   const [currentPlayer, setCurrentPlayer] = useState(interactionAreaState.currentPlayer);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    setShowStyles("");
+    setIsAnimating(true);
+    setTimeout(() => {
+      setShowStyles(styles.show);
+      setIsAnimating(false);
+    }, 500);
+  }, [currentPlayer]);
 
   useEffect(() => {
     if (interactionAreaState.currentPlayer) {
-      setShowStyles("");
-      setTimeout(() => {
-        setShowStyles(styles.show);
-        setCurrentPlayer(interactionAreaState.currentPlayer);
-      }, 200);
+      setCurrentPlayer(interactionAreaState.currentPlayer);
     }
-  }, [currentPlayer, interactionAreaState.currentPlayer]);
+  }, [interactionAreaState.currentPlayer]);
 
   return (
     <div className={`${styles.container} ${showStyles}`}>
-      Current Player Is {toTitleCase(currentPlayer || "No Player")}
+      Current Player Is {isAnimating ? "Next player turn" : toTitleCase(currentPlayer || "No Player")}
     </div>
   );
 }
