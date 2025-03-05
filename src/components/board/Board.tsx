@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useReducer, useRef, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import BoardContext from "@/context/boardContext";
 import playerTypes from "@/types/playerTypes";
 import PlayerTurn from "@/components/turns/PlayerTurn";
@@ -9,15 +9,14 @@ import ResetGameButton from "@/components/board/text/ResetGameButton";
 import InteractionArea from "@/components/board/interactionArea/InteractionArea";
 
 function Board() {
-  const [state, dispatch] = useReducer(interactionAreaReducer, interactionAreaInitialState)
+  const [state, dispatch] = useReducer(interactionAreaReducer, interactionAreaInitialState);
   const [width, setWidth] = useState(500);
   const [height, setHeight] = useState(500);
-  const [padding, setPadding] = useState(500);
   const ref = useRef<HTMLDivElement>(null);
 
   const players = useRef<playerTypes[]>([
     "player-1",
-    "computer"
+    "computer",
   ]);
 
   useEffect(() => {
