@@ -7,7 +7,7 @@ export const interactionAreaInitialState: InteractionAreaState = {
   playedMoves: new Set<string>(),
   cellsPlayed: new Map<string, playerTypes>(),
   // TODO: @param boardSize Enable this to change to increase the board size.
-  boardSize: 6,
+  boardSize: 3,
   hasGameStarted: false,
 
   // TODO: Randomize starting player (i.e. either computer or player 1)
@@ -154,12 +154,12 @@ export const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTy
   };
 
 
-  const board: Array<Array<number | null>> = [];
+  const board: Array<Array<number>> = [];
   for (let i = 0; i < boardSize; i++) {
     for (let j = 0; j < boardSize; j++) {
       const cell = `${i}${j}`;
       board[i] = board[i] ? board[i] : [];
-      board[i].push(cellsPlayed.get(cell) ? cellsPlayed.get(cell) === "player-1" ? 1 : 2 : null);
+      board[i].push(cellsPlayed.get(cell) ? cellsPlayed.get(cell) === "player-1" ? 1 : 2 : -1);
     }
   }
 
