@@ -164,12 +164,6 @@ export const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTy
   }
 
   const winnner = _checkWinner(board);
-  if (cellsPlayed.size > Math.ceil(boardSize / 2) + 1) {
-    if (winnner[0] === null && winnner[1] === null) {
-      alert(`Game over. No one has won! Click on the reset button to start over.`);
-      return true;
-    }
-  }
   let r = winnner[0] || 0;
   let c = winnner[1] || 0;
 
@@ -180,21 +174,32 @@ export const checkWinner = (boardSize: number, cellsPlayed: Map<string, playerTy
     c = c - 1;
   }
 
-  const rowCheck = cellsPlayed.get(`${r}${c}`) || "-";
+  if (winnner[0] && winnner[1]) {
 
-  if (rowCheck !== "-") {
+    const rowCheck = cellsPlayed.get(`${r}${c}`) || "-";
 
-    setTimeout(() => {
-      if (!alertShowing) {
-        alertShowing = true;
-        alert(`Game over. ${toTitleCase(rowCheck)} has won! Click on the reset button to start over.`);
-      }
+    if (rowCheck !== "-") {
+
       setTimeout(() => {
-        alertShowing = false;
-      }, 2000);
-    }, 100);
+        if (!alertShowing) {
+          alertShowing = true;
+          alert(`Game over. ${toTitleCase(rowCheck)} has won! Click on the reset button to start over.`);
+        }
+        setTimeout(() => {
+          alertShowing = false;
+        }, 2000);
+      }, 100);
 
-    return true;
+      return true;
+    }
+  }
+
+
+  if (cellsPlayed.size === (boardSize * boardSize)) {
+    if (winnner[0] === null && winnner[1] === null) {
+      alert(`Game over. No one has won! Click on the reset button to start over.`);
+      return true;
+    }
   }
   /*  let currentWinner: playerTypes | undefined;
    if (doesRowMatch) {
